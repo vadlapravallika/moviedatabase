@@ -39,6 +39,17 @@ exports.updateMovie = function(req, res, next) {
         res.json(updatedMovie);
     });
 };
+exports.editMovieForm = function(req, res, next) {
+    Movie.findById(req.params.id, function(err, movie) {
+        if (err) {
+            return next(err);
+        }
+        if (!movie) {
+            return res.status(404).json({ message: 'Movie not found' });
+        }
+        res.render('movies/edit', { title: 'Edit Movie', movie: movie });
+    });
+};
 exports.deleteMovie = async (req, res) => {
     try {
         await Movie.findByIdAndDelete(req.params.id);
