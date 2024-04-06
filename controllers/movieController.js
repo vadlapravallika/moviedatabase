@@ -1,7 +1,7 @@
 // controllers/movieController.js
 
 const Movie = require('../models/Movie');
-const action = require('../src/index');
+const action = require('../src/movieRepository.js');
 
 
 // Controller function to create a new movie
@@ -39,7 +39,7 @@ exports.updateMovie = function(req, res, next) {
         res.json(updatedMovie);
     });
 };
-exports.editMovieForm = function(req, res, next) {
+exports.editMovie = function(req, res, next) {
     Movie.findById(req.params.id, function(err, movie) {
         if (err) {
             return next(err);
