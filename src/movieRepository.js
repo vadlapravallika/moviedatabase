@@ -1,6 +1,18 @@
 // src/movieRepository.js
+const { MongoClient, ObjectId } = require('mongodb');
+const url = "mongodb+srv://vadlapravallika1:WzHVccixBLbmMcuR@moviedatabase.wxb5wnw.mongodb.net/?retryWrites=true&w=majority&appName=Moviedatabase";
+const client = new MongoClient(url);
 
-const connect = require('./db');
+async function connect() {
+    try {
+        await client.connect();
+        console.log('Connected to the MongoDB server...');
+        return client.db('movielist').collection('movies');
+    } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
+        throw error;
+    }
+}
 
 const repo = {
     findAll: async () => {
@@ -15,7 +27,7 @@ const repo = {
     findById: async (id) => {
         try {
             const moviesColl = await connect();
-            return await moviesColl.findOne({ _id: id });
+            return await moviesColl.findOne({ _id: ObjectId(id) });
         } catch (error) {
             console.error('Error finding movie by ID:', error);
             throw error;
@@ -33,7 +45,7 @@ const repo = {
     delete: async (id) => {
         try {
             const moviesColl = await connect();
-            return await moviesColl.deleteOne({ _id: id });
+            return await moviesColl.deleteOne({ _id: ObjectId(id) });
         } catch (error) {
             console.error('Error deleting movie:', error);
             throw error;
@@ -42,7 +54,7 @@ const repo = {
     update: async (id, updates) => {
         try {
             const moviesColl = await connect();
-            return await moviesColl.updateOne({ _id: id }, { $set: updates });
+            return await moviesColl.updateOne({ _id: ObjectId(id) }, { $set: updates });
         } catch (error) {
             console.error('Error updating movie:', error);
             throw error;
