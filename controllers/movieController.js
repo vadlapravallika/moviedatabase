@@ -30,6 +30,15 @@ exports.getMovieById = function(req, res, next) {
             res.status(500).json({ message: err.message });
         });
 };
+exports.updateMovie = function(req, res, next) {
+    //update movie by ID
+    Movie.findByIdAndUpdate(req.params.id, req.body, { new: true }, function(err, updatedMovie) {
+        if (err) {
+            return res.status(400).json({ message: err.message });
+        }
+        res.json(updatedMovie);
+    });
+};
 
 
 
