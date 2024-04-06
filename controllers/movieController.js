@@ -39,6 +39,12 @@ exports.updateMovie = function(req, res, next) {
         res.json(updatedMovie);
     });
 };
-
-
+exports.deleteMovie = async (req, res) => {
+    try {
+        await Movie.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Movie deleted' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
 
