@@ -17,4 +17,19 @@ exports.moviesAll = async function(req, res, next) {
     const movies = await Movie.find({});
     res.render('movies/all', { title: 'All Movies', movies: movies });
 };
+exports.getMovieById = function(req, res, next) {
+    // Find movie by ID
+    Movie.findById(req.params.id)
+        .then(function(movie) {
+            if (!movie) {
+                return res.status(404).json({ message: 'Movie not found' });
+            }
+            res.json(movie);
+        })
+        .catch(function(err) {
+            res.status(500).json({ message: err.message });
+        });
+};
+
+
 
