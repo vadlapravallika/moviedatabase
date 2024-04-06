@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+    div.container
+        div(class='d-flex justify-content-end mb-3')
+            a(class='btn btn-primary' href="/movies/add") Add Movie
+        if movies && movies.length
+            each movie in movies
+                .card.mb-3
+                    .card-body
+                        h5.card-title= movie.title
+                        p.card-text Director: #{movie.director}
+                        p.card-text Year: #{movie.year}
+                        if movie.notes
+                            p.card-text Notes: #{movie.notes}
+                        else
+                            p.card-text Notes: N/A
+                        a.btn.btn-primary(href=`/movies/${movie.id}`) View
+                        a.btn.btn-secondary(href=`/movies/${movie.id}/edit`) Edit
+                        form(action=`/movies/${movie.id}` method="post" style="display: inline;")
+                            input(type="hidden" name="_method" value="DELETE")
+                            button.btn.btn-danger(type="submit") Delete
+        else
+            p No movies found
