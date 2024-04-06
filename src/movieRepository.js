@@ -1,6 +1,6 @@
 // src/movieRepository.js
 const { MongoClient, ObjectId } = require('mongodb');
-const url = "mongodb+srv://vadlapravallika1:WzHVccixBLbmMcuR@moviedatabase.wxb5wnw.mongodb.net/?retryWrites=true&w=majority&appName=Moviedatabase";
+const url = process.env.MONGODB_URI;
 const client = new MongoClient(url);
 
 async function connect() {

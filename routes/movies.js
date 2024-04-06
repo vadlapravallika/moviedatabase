@@ -8,7 +8,7 @@ const movieController = require('../controllers/movieController');
 router.post('/', movieController.createMovie);
 
 // GET route to retrieve all movies
-router.get('/', movieController.getAllMovies);
+router.get('/:id', movieController.getAllMovies);
 
 // GET route to retrieve a specific movie by ID
 router.get('/:id', movieController.getMovieById);
@@ -16,11 +16,9 @@ router.get('/:id', movieController.getMovieById);
 // PUT route to update a movie by ID
 router.put('/:id', movieController.updateMovie);
 // edit movie route
-router.edit('/:id',movieController.editMovie);
-
+router.put('/:id',movieController.editMovie);
 // DELETE route to delete a movie by ID
 router.delete('/:id', movieController.deleteMovie);
-
 
 
 module.exports = router;
