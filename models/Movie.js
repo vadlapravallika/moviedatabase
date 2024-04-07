@@ -1,14 +1,14 @@
+const mongoose = require('mongoose');
 
+const movieSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  director: { type: String, required: true },
+  year: { type: Number, required: true },
+  notes: { type: String, default: '' },
+  created_at: { type: Date, default: Date.now },
+  modified_at: { type: Date, default: Date.now }
+});
 
-class Movie {
-    constructor(id, title, director, year, notes) {
-      this.id = id;
-      this.title = title;
-      this.director = director;
-      this.year = year;
-      this.notes = notes || '';
-      this.created_at = new Date().toLocaleString();
-      this.modified_at = new Date().toLocaleString();
-    }
-  }
-  module.exports = Movie;
+const Movie = mongoose.model('Movie', movieSchema);
+
+module.exports = Movie;

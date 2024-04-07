@@ -1,61 +1,61 @@
-// controllers/movieController.js
+const Movie = require('../models/Movie'); // Import the Movie model
 
-const Movie = require('../models/Movie');
-const action = require('../src/movieRepository.js');
-
-
-// Controller function to create a new movie
-exports.createMovie = async (req, res) => {
-    const {title, director, year, notes} = req.body
-        const newMovie = new Movie('',title, director, year, notes);
-        await action.create(newMovie);
-        res.json({msg:'/movies'});
-};
-
-// Controller function to render movies list view
-exports.moviesAll = async function(req, res, next) {
-    const movies = await Movie.find({});
-    res.render('movies/all', { title: 'All Movies', movies: movies });
-};
-exports.getMovieById = function(req, res, next) {
-    // Find movie by ID
-    Movie.findById(req.params.id)
-        .then(function(movie) {
-            if (!movie) {
-                return res.status(404).json({ message: 'Movie not found' });
-            }
-            res.json(movie);
-        })
-        .catch(function(err) {
-            res.status(500).json({ message: err.message });
-        });
-};
-exports.updateMovie = function(req, res, next) {
-    //update movie by ID
-    Movie.findByIdAndUpdate(req.params.id, req.body, { new: true }, function(err, updatedMovie) {
-        if (err) {
-            return res.status(400).json({ message: err.message });
-        }
-        res.json(updatedMovie);
-    });
-};
-exports.editMovie = function(req, res, next) {
-    Movie.findById(req.params.id, function(err, movie) {
-        if (err) {
-            return next(err);
-        }
-        if (!movie) {
-            return res.status(404).json({ message: 'Movie not found' });
-        }
-        res.render('movies/edit', { title: 'Edit Movie', movie: movie });
-    });
-};
-exports.deleteMovie = async (req, res) => {
+// Controller methods for movie routes
+exports.createMovie = async (req, res, next) => {
     try {
-        await Movie.findByIdAndDelete(req.params.id);
-        res.json({ message: 'Movie deleted' });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+        // Create a new movie using data from the request body
+        const newMovie = await Movie.create(req.body);
+        res.status(201).json(newMovie);
+    } catch (error) {
+        next(error); // Pass the error to the error handling middleware
     }
 };
 
+exports.moviesAll = async (req, res, next) => {
+    try {
+        // Retrieve all movies from the database
+        const movies = await Movie.find();
+        res.status(200).json(movies);
+    } catch (error) {
+        next(error); // Pass the error to the error handling middleware
+    }
+};
+
+exports.getMovieById = async (req, res, next) => {
+    try {
+        // Retrieve a specific movie by ID from the database
+        const movie = await Movie.findById(req.params.id);
+        if (!movie) {
+            return res.status(404).json({ message: 'Movie not found' });
+        }
+        res.status(200).json(movie);
+    } catch (error) {
+        next(error); // Pass the error to the error handling middleware
+    }
+};
+
+exports.updateMovie = async (req, res, next) => {
+    try {
+        // Update a movie by ID with data from the request body
+        const updatedMovie = await Movie.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedMovie) {
+            return res.status(404).json({ message: 'Movie not found' });
+        }
+        res.status(200).json(updatedMovie);
+    } catch (error) {
+        next(error); // Pass the error to the error handling middleware
+    }
+};
+
+exports.deleteMovie = async (req, res, next) => {
+    try {
+        // Delete a movie by ID from the database
+        const deletedMovie = await Movie.findByIdAndDelete(req.params.id);
+        if (!deletedMovie) {
+            return res.status(404).json({ message: 'Movie not found' });
+        }
+        res.status(200).json({ message: 'Movie deleted successfully' });
+    } catch (error) {
+        next(error); // Pass the error to the error handling middleware
+    }
+};
