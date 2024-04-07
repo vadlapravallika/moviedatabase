@@ -29,7 +29,7 @@ Install Dependencies:
 Run npm install to install project dependencies.
 
 Start Application:
-Begin the application by running the command npm run start.
+Begin the application by running the command npm start.
 
 Access Application:
 Open your web browser and navigate to http://localhost:3000 to access the application.
