@@ -1,4 +1,4 @@
-const Movie = require('../models/Movie'); // Import the Movie model
+var repo = require("../src/movieRepository");
 
 // Controller methods for movie routes
 exports.createMovie = async (req, res, next) => {
@@ -14,7 +14,7 @@ exports.createMovie = async (req, res, next) => {
 exports.moviesAll = async (req, res, next) => {
     try {
         // Retrieve all movies from the database
-        const movies = await Movie.find();
+        const movies = await repo.findAllMovies();
         res.status(200).json(movies);
     } catch (error) {
         next(error); // Pass the error to the error handling middleware

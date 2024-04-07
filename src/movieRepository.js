@@ -14,7 +14,7 @@ const movieSchema = new mongoose.Schema({
 });
 
 // Create the Movie model
-const Movie = mongoose.model('Movie', movieSchema);
+const Movie = mongoose.model('movie', movieSchema);
 
 // Function to create a new movie (using Mongoose)
 async function createMovie(movie) {
