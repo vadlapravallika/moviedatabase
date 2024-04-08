@@ -9,6 +9,6 @@ const movieSchema = new mongoose.Schema({
   modified_at: { type: Date, default: Date.now }
 });
 
-const Movie = mongoose.model('Movie', movieSchema);
+const Movie = mongoose.model('movie', movieSchema);
 
 module.exports = Movie;

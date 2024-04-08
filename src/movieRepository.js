@@ -1,20 +1,18 @@
 // src/movieRepository.js
 const { MongoClient, ObjectId } = require('mongodb');
-const url = process.env.MONGODB_URI;
-const client = new MongoClient(url);
-
+const Movie = require('../models/Movie');
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+dotenv.config();
+const url = process.env.MONGODB_URI;
 
-// Define the Movie schema
-const movieSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  director: { type: String, required: true },
-  year: { type: Number, required: true },
-  notes: { type: String },
-});
-
-// Create the Movie model
-const Movie = mongoose.model('movie', movieSchema);
+mongoose.connect(url)
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+  });
 
 // Function to create a new movie (using Mongoose)
 async function createMovie(movie) {
@@ -24,7 +22,10 @@ async function createMovie(movie) {
 
 // Function to retrieve all movies (using Mongoose)
 async function findAllMovies() {
-  return await Movie.find({}); // Find all movies and return them
+  await Movie.find().then(data => {
+    console.log(data);
+    return data;
+  }); // Find all movies and return them
 }
 
 // Function to find a movie by ID (using Mongoose)
