@@ -11,7 +11,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var moviesRouter = require('./routes/movies');
 
-// Create Express application
+// Create Express applicatio
 var app = express();
 
 // View engine setup
