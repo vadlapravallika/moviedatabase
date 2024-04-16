@@ -13,7 +13,7 @@ router.post('/add',
   body('title').trim().notEmpty().withMessage('NO empty title!'),
   body('director').trim().notEmpty().withMessage('NO empty Director!'),
   body('year').trim().notEmpty().withMessage('Year cannot be empty!').isInt().withMessage('Year must be a valid!'),
-  body('notes').optional({ nullable: true }).trim(), 
+  body('notes').optional({ nullable: true }).trim(),
   movieController.movies_create_post);
 
 /* GET a todo */
