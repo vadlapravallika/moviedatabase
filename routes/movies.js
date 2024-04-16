@@ -3,10 +3,10 @@ var router = express.Router();
 const movieController = require('../controllers/movieController');
 const { body } = require('express-validator');
 
-/* GET todos listing. */
+/* GET movies listing. */
 router.get('/', movieController.movies_list);
 
-/* GET todos add */
+/* GET movies add */
 router.get('/add', movieController.movies_create_get);
 
 router.post('/add',
@@ -16,19 +16,19 @@ router.post('/add',
   body('notes').optional({ nullable: true }).trim(),
   movieController.movies_create_post);
 
-/* GET a todo */
+/* GET a movies*/
 router.get('/:uuid', movieController.movies_detail);
 
-/* GET todos delete */
+/* GET movies delete */
 router.get('/:uuid/delete', movieController.movies_delete_get);
 
-/* POST todos delete */
+/* POST moviesdelete */
 router.post('/:uuid/delete', movieController.movies_delete_post);
 
-/* GET todos edit */
+/* GET movies edit */
 router.get('/:uuid/edit', movieController.movies_edit_get);
 
-/* POST todos add */
+/* POST movies add */
 router.post('/:uuid/edit', movieController.movies_edit_post);
 
 module.exports = router;
