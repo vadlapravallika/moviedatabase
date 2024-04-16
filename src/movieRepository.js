@@ -1,52 +1,68 @@
-// src/movieRepository.js
 const { MongoClient, ObjectId } = require('mongodb');
-const Movie = require('../models/Movie');
-const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-dotenv.config();
-const url = process.env.MONGODB_URI;
+const Movie = require('../src/Movie');
 
-mongoose.connect(url)
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((error) => {
-    console.error('Error connecting to MongoDB:', error);
-  });
+const url = process.env.MONGODB_URL;
 
-// Function to create a new movie (using Mongoose)
-async function createMovie(movie) {
-  const newMovie = new Movie(movie); // Create a new Movie document
-  return await newMovie.save(); // Save the new movie to the database and return it
+const client = new MongoClient(url);
+
+async function run() {
+    await client.connect();
+    return 'Connected to the MongoDB server...';
 }
 
-// Function to retrieve all movies (using Mongoose)
-async function findAllMovies() {
-  await Movie.find().then(data => {
-    console.log(data);
-    return data;
-  }); // Find all movies and return them
-}
+run().then(console.log).catch(console.error);
 
-// Function to find a movie by ID (using Mongoose)
-async function findById(id) {
-  return await Movie.findById(id); // Find movie by ID and return it
-}
-
-// Function to update a movie by ID (using Mongoose)
-async function updateMovie(id, updates) {
-  return await Movie.findByIdAndUpdate(id, updates, { new: true }); // Update movie by ID and return the updated document
-}
-
-// Function to delete a movie by ID (using Mongoose)
-async function deleteMovie(id) {
-  return await Movie.findByIdAndDelete(id); // Delete movie by ID and return the deleted document (or null if not found)
-}
-
-module.exports = {
-  createMovie,
-  findAllMovies,
-  findById,
-  updateMovie,
-  deleteMovie,
+const movieRepo = {
+    findAll: async () => {
+        let movies = [];
+        const moviesColl = client.db('express-movies-mongodb').collection('movies');
+        const cursor = moviesColl.find({});
+        await cursor.forEach(doc => {
+            const movie = new Movie(doc._id.toString(), doc.title, doc.director, doc.year, doc.notes);
+            movies.push(movie);
+        });
+        return movies;
+    },
+    findById: async (id) => {
+        const moviesColl = client.db('express-movies-mongodb').collection('movies');
+        const filter = { _id: new ObjectId(id) };
+        const doc = await moviesColl.findOne(filter);
+        if (doc) {
+            return new Movie(doc._id.toString(), doc.title, doc.director, doc.year, doc.notes);
+        } else {
+            return null; // Movie not found
+        }
+    },
+    createMovie: async (movie) => {
+        const movieData = {
+            title: movie.title,
+            director: movie.director,
+            year: movie.year,
+            notes: movie.notes
+        };
+        const moviesColl = client.db('express-movies-mongodb').collection('movies');
+        const result = await moviesColl.insertOne(movieData);
+        console.log(`A document was inserted with the _id: ${result.insertedId}`);
+    },
+    deleteMovieById: async (id) => {
+        const moviesColl = client.db('express-movies-mongodb').collection('movies');
+        const filter = { _id: new ObjectId(id) };
+        const result = await moviesColl.deleteOne(filter);
+        if (result.deletedCount === 1) {
+            console.log('Successfully deleted one document');
+        } else {
+            console.log('No documents matched the query. Deleted 0 documents');
+        }
+    },
+    updateMovie: async (id, updates) => {
+        const moviesColl = client.db('express-movies-mongodb').collection('movies');
+        const filter = { _id: new ObjectId(id) };
+        const updateDoc = {
+            $set: updates
+        };
+        const result = await moviesColl.updateOne(filter, updateDoc);
+        console.log(`${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`);
+    }
 };
+
+module.exports = movieRepo;

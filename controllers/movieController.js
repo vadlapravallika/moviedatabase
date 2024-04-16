@@ -1,61 +1,80 @@
-var repo = require("../src/movieRepository");
+const { validationResult } = require('express-validator');
+const movieRepo = require('../src/movieRepository');
+const Movie = require('../src/Movie'); // Assuming Movie model is correctly defined
 
-// Controller methods for movie routes
-exports.createMovie = async (req, res, next) => {
-    try {
-        // Create a new movie using data from the request body
-        const newMovie = await Movie.create(req.body);
-        res.status(201).json(newMovie);
-    } catch (error) {
-        next(error); // Pass the error to the error handling middleware
+/* GET movies listing */
+exports.movies_list = async function(req, res, next) {
+    const data = await movieRepo.findAllMovies();
+    res.render('list', { title: 'Movie List', movies: data } );
+};
+  
+/* GET add movie form */
+exports.movies_create_get = function(req, res, next) {
+    res.render('add', { title: 'Add a Movie'} );
+};
+  
+/* POST add movie */
+exports.movies_create_post = async function(req, res, next) {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+        res.render('add', { title: 'Add a Movie', msg: result.array() });
+    } else {
+        const newMovie = new Movie({
+            id: '', 
+            title: req.body.title,
+            director: req.body.director,
+            year: req.body.year,
+            notes: req.body.notes,
+            // Add other movie properties as needed
+        });
+        await movieRepo.createMovie(newMovie);
+        res.redirect('/movies');
     }
 };
 
-exports.moviesAll = async (req, res, next) => {
-    try {
-        // Retrieve all movies from the database
-        const movies = await repo.findAllMovies();
-        res.status(200).json(movies);
-    } catch (error) {
-        next(error); // Pass the error to the error handling middleware
+  
+/* GET a movie */
+exports.movies_detail = async function(req, res, next) {
+    const movie = await movieRepo.findById(req.params.id);
+    if (movie) {
+        res.render('movies', { title: 'Movie Detail', movie: movie });
+    } else {
+        res.redirect('/movies');
     }
 };
-
-exports.getMovieById = async (req, res, next) => {
-    try {
-        // Retrieve a specific movie by ID from the database
-        const movie = await Movie.findById(req.params.id);
-        if (!movie) {
-            return res.status(404).json({ message: 'Movie not found' });
-        }
-        res.status(200).json(movie);
-    } catch (error) {
-        next(error); // Pass the error to the error handling middleware
-    }
+  
+/* GET delete movie confirmation */
+exports.movies_delete_get = async function(req, res, next) {
+    const movie = await movieRepo.findById(req.params.id);
+    res.render('movie_delete', { title: 'Delete Movie', movie: movie });
 };
-
-exports.updateMovie = async (req, res, next) => {
-    try {
-        // Update a movie by ID with data from the request body
-        const updatedMovie = await Movie.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!updatedMovie) {
-            return res.status(404).json({ message: 'Movie not found' });
-        }
-        res.status(200).json(updatedMovie);
-    } catch (error) {
-        next(error); // Pass the error to the error handling middleware
-    }
+  
+/* POST delete movie */
+exports.movies_delete_post = async function(req, res, next) {
+    await movieRepo.deleteMovie(req.params.id);
+    res.redirect('/movies');
 };
-
-exports.deleteMovie = async (req, res, next) => {
-    try {
-        // Delete a movie by ID from the database
-        const deletedMovie = await Movie.findByIdAndDelete(req.params.id);
-        if (!deletedMovie) {
-            return res.status(404).json({ message: 'Movie not found' });
-        }
-        res.status(200).json({ message: 'Movie deleted successfully' });
-    } catch (error) {
-        next(error); // Pass the error to the error handling middleware
+  
+/* GET edit movie form */
+exports.movies_edit_get = async function(req, res, next) {
+    const movie = await movieRepo.findById(req.params.id);
+    res.render('movie_edit', { title: 'Edit Movie', movie: movie });
+};
+  
+/* POST edit movie */
+exports.movies_edit_post = async function(req, res, next) {
+    if (req.body.title.trim() === '') {
+        const movie = await movieRepo.findById(req.params.id);
+        res.render('movie_edit', { title: 'Edit Movie', msg: 'Movie title cannot be empty!', movie: movie });
+    } else {
+        const updatedMovie = {
+            title: req.body.title,
+            director: req.body.director,
+            year: req.body.year,
+            notes: req.body.notes,
+            // Add other movie properties as needed
+        };
+        await movieRepo.updateMovie(req.params.id, updatedMovie);
+        res.redirect('/movies');
     }
 };
