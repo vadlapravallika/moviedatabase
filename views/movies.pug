@@ -20,7 +20,7 @@ block content
         span.text-muted #{movie.notes}
 
     .actions.d-flex.align-items-end.mt-3
-      a.btn.btn-primary(href='/movies/list') Back
+      a.btn.btn-primary(href='/list') Back
     a.btn.btn-secondary(href=`/movies/${movie.id}/edit`) Edit
     form(style='display:inline-block', method='post', action=`/movies/${movie.id}/delete`)
           input(type="hidden" name="_method" value="DELETE")

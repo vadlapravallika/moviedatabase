@@ -4,7 +4,7 @@ const movieController = require('../controllers/movieController');
 const { body } = require('express-validator');
 
 /* GET movies listing. */
-router.get('/', movieController.movies_list);
+router.get('/list', movieController.movies_list);
 
 /* GET movies add */
 router.get('/add', movieController.movies_create_get);
@@ -17,18 +17,18 @@ router.post('/add',
   movieController.movies_create_post);
 
 /* GET a movies*/
-router.get('/:uuid', movieController.movies_detail);
+router.get('/:id', movieController.movies_detail);
 
 /* GET movies delete */
-router.get('/:uuid/delete', movieController.movies_delete_get);
+router.get('/:id/delete', movieController.movies_delete_get);
 
 /* POST moviesdelete */
-router.post('/:uuid/delete', movieController.movies_delete_post);
+router.post('/:id/delete', movieController.movies_delete_post);
 
 /* GET movies edit */
-router.get('/:uuid/edit', movieController.movies_edit_get);
+router.get('/:id/edit', movieController.movies_edit_get);
 
 /* POST movies add */
-router.post('/:uuid/edit', movieController.movies_edit_post);
+router.post('/:id/edit', movieController.movies_edit_post);
 
 module.exports = router;
