@@ -3,7 +3,7 @@ extends layout
 block content
     div.container
         h1 Update Movie
-        form(action=`/movies/${movie.id}` method="post")
+        form(action=`/movies/${movie.id}/edit` method="post")
             label(for="title") Title
             input.form-control(type="text" name="title" value=movie.title ? movie.title : '' required)
             

@@ -16,7 +16,7 @@ block content
                         else
                             p.card-text Notes: N/A
                         a.btn.btn-primary(href=`/movies/${movie.id}`) View
-                        a.btn.btn-secondary(href=`/movies/${movie.id}/edit`) Edit
+                    a.btn.btn-secondary(href=`/movies/${movie.id}/movies_edit`) Edit
                         form(action=`/movies/${movie.id}` method="post" style="display: inline;")
                             input(type="hidden" name="_method" value="DELETE")
                             button.btn.btn-danger(type="submit") Delete

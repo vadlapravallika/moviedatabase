@@ -4,10 +4,10 @@ const Movie = require('../src/Movie'); // Assuming Movie model is correctly defi
 
 /* GET movies listing */
 exports.movies_list = async function(req, res, next) {
-    const data = await movieRepo.findAllMovies();
+    const data = await movieRepo.findAll();
     res.render('list', { title: 'Movie List', movies: data } );
 };
-  
+
 /* GET add movie form */
 exports.movies_create_get = function(req, res, next) {
     res.render('add', { title: 'Add a Movie'} );
@@ -57,16 +57,18 @@ exports.movies_delete_post = async function(req, res, next) {
   
 /* GET edit movie form */
 exports.movies_edit_get = async function(req, res, next) {
-    const movie = await movieRepo.findById(req.params.id);
-    res.render('movie_edit', { title: 'Edit Movie', movie: movie });
+    try {
+        const movie = await movieRepo.findById(req.params.id);
+        res.render('movie_edit', { title: 'Edit Movie', movie: movie });
+    } catch (err) {
+        // Handle errors appropriately
+        next(err);
+    }
 };
-  
+
 /* POST edit movie */
 exports.movies_edit_post = async function(req, res, next) {
-    if (req.body.title.trim() === '') {
-        const movie = await movieRepo.findById(req.params.id);
-        res.render('movie_edit', { title: 'Edit Movie', msg: 'Movie title cannot be empty!', movie: movie });
-    } else {
+    try {
         const updatedMovie = {
             title: req.body.title,
             director: req.body.director,
@@ -74,7 +76,13 @@ exports.movies_edit_post = async function(req, res, next) {
             notes: req.body.notes,
             // Add other movie properties as needed
         };
+
         await movieRepo.updateMovie(req.params.id, updatedMovie);
         res.redirect('/movies');
+    } catch (err) {
+        // Error handling
+        const movie = await movieRepo.findById(req.params.id);
+        res.render('movie_edit', { title: 'Edit Movie', msg: 'An error occurred. Please try again.', movie: movie });
     }
 };
+
