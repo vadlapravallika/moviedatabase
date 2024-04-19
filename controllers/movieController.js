@@ -46,20 +46,20 @@ exports.movies_detail = async function(req, res, next) {
 /* GET delete movie confirmation */
 exports.movies_delete_get = async function(req, res, next) {
     const movie = await movieRepo.findById(req.params.id);
-    res.render('movie_delete', { title: 'Delete Movie', movie: movie });
+    res.render('delete', { title: 'Delete Movie', movie: movie });
 };
   
 /* POST delete movie */
 exports.movies_delete_post = async function(req, res, next) {
-    await movieRepo.deleteMovie(req.params.id);
-    res.redirect('/movies');
+    await movieRepo.deleteMovieById(req.params.uuid);
+    res.redirect('/movies/');
 };
   
 /* GET edit movie form */
 exports.movies_edit_get = async function(req, res, next) {
     try {
         const movie = await movieRepo.findById(req.params.id);
-        res.render('movie_edit', { title: 'Edit Movie', movie: movie });
+        res.render('edit', { title: 'Edit Movie', movie: movie });
     } catch (err) {
         // Handle errors appropriately
         next(err);
@@ -82,7 +82,7 @@ exports.movies_edit_post = async function(req, res, next) {
     } catch (err) {
         // Error handling
         const movie = await movieRepo.findById(req.params.id);
-        res.render('movie_edit', { title: 'Edit Movie', msg: 'An error occurred. Please try again.', movie: movie });
+        res.render('edit', { title: 'Edit Movie', msg: 'An error occurred. Please try again.', movie: movie });
     }
 };
 

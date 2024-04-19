@@ -3,7 +3,7 @@ extends layout
 block content
     div.container
         h1 Create New Movie
-        form(action="/add" method="post")
+        form(method="post" action="/add" )
             label(for="title") Title
             input.form-control(type="text" name="title" required)
             
@@ -18,5 +18,5 @@ block content
             
             button.btn.btn-success.w-100(type="submit") Save
             
-        a.btn.btn-secondary.my-2.w-100(href="/movies") Back
+        a.btn.btn-secondary.my-2.w-100(href="/movies/list") Back
 

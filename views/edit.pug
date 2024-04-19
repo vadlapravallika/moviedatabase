@@ -3,7 +3,7 @@ extends layout
 block content
     div.container
         h1 Update Movie
-        form(action=`/movies/${movie.id}/edit` method="post")
+        form(method="post" action=`/movies/${movie.id}/edit` )
             label(for="title") Title
             input.form-control(type="text" name="title" value=movie.title ? movie.title : '' required)
             
@@ -15,7 +15,6 @@ block content
             
             label(for="notes") Notes
             textarea.form-control(name="notes" cols="30" rows="10") #{movie.notes}
+            button.btn.btn-success(type="submit") Save Changes 
             
-            button.btn.btn-success(type="submit") Save
-            
-        a.btn.btn-secondary.my-2.ms-2(href="/movies") Back
+        a.btn.btn-secondary.my-2.ms-2(href="/movies/list") Back
