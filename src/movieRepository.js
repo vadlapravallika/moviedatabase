@@ -26,7 +26,7 @@ const movieRepo = {
     },
     findById: async (id) => {
         const moviesColl = client.db('express-movies-mongodb').collection('movies');
-        const filter = { _id: new ObjectId() };
+        const filter = {_id: new ObjectId(id)};
         const doc = await moviesColl.findOne(filter);
         if (doc) {
             return new Movie(doc._id.toString(), doc.title, doc.director, doc.year, doc.notes);
