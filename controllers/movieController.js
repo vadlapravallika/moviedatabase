@@ -58,8 +58,8 @@ exports.movies_delete_get = async function(req, res, next) {
   
 /* POST delete movie */
 exports.movies_delete_post = async function(req, res, next) {
-    await movieRepo.deleteMovieById(req.params.uuid);
-    res.redirect('/movies/');
+    await movieRepo.deleteMovieById(req.params.id);
+    res.redirect('movies');
 };
   
 /* GET edit movie form */
@@ -81,11 +81,11 @@ exports.movies_edit_post = async function(req, res, next) {
             director: req.body.director,
             year: req.body.year,
             notes: req.body.notes,
-            // Add other movie properties as needed
+            
         };
 
         await movieRepo.updateMovie(req.params.id, updatedMovie);
-        res.redirect('/movies');
+        res.redirect('movies');
     } catch (err) {
         // Error handling
         const movie = await movieRepo.findById(req.params.id);
