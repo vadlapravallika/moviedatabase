@@ -21,7 +21,5 @@ block content
 
     .actions.d-flex.align-items-end.mt-3
       a.btn.btn-secondary(href=`/movies/${movie.id}/edit`) Edit
-      form(style='display:inline-block', method='post', action=`/movies/${movie.id}`)
-        input(type="hidden" name="_method" value="DELETE")
-        button.btn.btn-danger.ms-1(type="submit") Delete
+      a.btn.btn-danger(href=`/movies/${movie.id}/delete`) Delete Movie
       a.btn.btn-primary(href='/movies/list') Back
