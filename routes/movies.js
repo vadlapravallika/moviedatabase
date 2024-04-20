@@ -9,7 +9,7 @@ router.get('/list', movieController.movies_list);
 /* GET movies add */
 router.get('/add', movieController.movies_create_get);
 
-router.post('/movies/add',
+router.post('/add',
   body('title').trim().notEmpty().withMessage('NO empty title!'),
   body('director').trim().notEmpty().withMessage('NO empty Director!'),
   body('year').trim().notEmpty().withMessage('Year cannot be empty!').isInt().withMessage('Year must be a valid!'),
