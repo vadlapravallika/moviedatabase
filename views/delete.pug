@@ -4,7 +4,7 @@ block content
   h1= title
   p Are you sure you want to delete the following Movie ?
   hr
-  form( action=`/movies/${movie.id}/delete` method='POST')
+  form(method='POST' action=`/movies/${movie.id}/delete` )
     button(type='submit') Confirm Delete
     | 
     a(href=`/movies/${movie.id}`) Cancel
