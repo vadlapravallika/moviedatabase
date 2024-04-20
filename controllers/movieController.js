@@ -6,19 +6,19 @@ const { ObjectId } = require('mongodb');
 /* GET movies listing */
 exports.movies_list = async function(req, res, next) {
     const data = await movieRepo.findAll();
-    res.render('list', { title: 'Movie List', movies: data } );
+    res.render('/list', { title: 'Movie List', movies: data } );
 };
 
 /* GET add movie form */
 exports.movies_create_get = function(req, res, next) {
-    res.render('/add', { title: 'Add a Movie'} );
+    res.render('add', { title: 'Add a Movie'} );
 };
   
 /* POST add movie */
 exports.movies_create_post = async function(req, res, next) {
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        res.render('/add', { title: 'Add a Movie', msg: result.array() });
+        res.render('add', { title: 'Add a Movie', msg: result.array() });
     } else {
         const newMovie = new Movie({
             id: '', 
