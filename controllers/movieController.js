@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const movieRepo = require('../src/movieRepository');
 const Movie = require('../src/Movie'); // Assuming Movie model is correctly defined
+const { ObjectId } = require('mongodb');
 
 /* GET movies listing */
 exports.movies_list = async function(req, res, next) {
@@ -10,14 +11,14 @@ exports.movies_list = async function(req, res, next) {
 
 /* GET add movie form */
 exports.movies_create_get = function(req, res, next) {
-    res.render('add', { title: 'Add a Movie'} );
+    res.render('/add', { title: 'Add a Movie'} );
 };
   
 /* POST add movie */
 exports.movies_create_post = async function(req, res, next) {
     const result = validationResult(req);
     if (!result.isEmpty()) {
-        res.render('add', { title: 'Add a Movie', msg: result.array() });
+        res.render('/add', { title: 'Add a Movie', msg: result.array() });
     } else {
         const newMovie = new Movie({
             id: '', 
@@ -31,7 +32,6 @@ exports.movies_create_post = async function(req, res, next) {
         res.redirect('/movies');
     }
 };
-
   
 /* GET a movie */
 exports.movies_detail = async function(req, res, next) {
@@ -85,4 +85,3 @@ exports.movies_edit_post = async function(req, res, next) {
         res.render('edit', { title: 'Edit Movie', msg: 'An error occurred. Please try again.', movie: movie });
     }
 };
-

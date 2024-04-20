@@ -3,7 +3,7 @@ extends layout
 block content
     div.container
         div(class='d-flex justify-content-end mb-3')
-            a(class='btn btn-primary' href="/movies/add") Add Movie
+            a(class='btn btn-primary' href="/add") Add Movie
         if movies && movies.length
             each movie in movies
                 .card.mb-3
@@ -15,6 +15,6 @@ block content
                             p.card-text Notes: #{movie.notes}
                         else
                             p.card-text Notes: N/A
-                        a.btn.btn-primary(href=`/movies/${movie.id}`) View
+                        a.btn.btn-primary(href=`/${movie.id}`) View
         else
             p No movies found
